@@ -327,37 +327,34 @@ export default function ShesGoneBoard() {
         </div>
       )}
 
-      {screen === "letter" && currentChar && (
-        <div style={s.letter}>
-          <div style={{fontSize:"12px",color:"#b0a0c0",letterSpacing:"5px",textTransform:"uppercase",marginBottom:"16px",fontWeight:"500"}}>彼女が残した、最後のメッセージ</div>
-          <div style={{fontFamily:"serif",fontSize:"18px",color:currentChar.color,letterSpacing:"4px",marginBottom:"24px",display:"flex",alignItems:"center",gap:"16px",fontWeight:"700"}}>
-            <img src={currentChar.image} alt={currentChar.name} style={{width:"60px",height:"60px",objectFit:"cover",objectPosition:"top",borderRadius:"2px"}} />
-            {currentChar.name}
-          </div>
-          <div className="paper-box" style={s.paper}>
-            <div style={s.paperText}>{currentChar.letter}</div>
-          </div>
-          <div style={s.disc}>
-            <div style={{fontSize:"12px",color:"#c0b0d0",letterSpacing:"4px",textTransform:"uppercase",marginBottom:"14px",fontWeight:"600"}}>グループで話し合う</div>
-            {DISCUSSION.map((q, i) => (
-              <div key={i} style={s.q}>
-                <span style={{color:"#c0b0d0",fontSize:"13px",flexShrink:0,marginTop:"2px",fontWeight:"700"}}>Q{i+1}</span>
-                <span>{q}</span>
-              </div>
-            ))}
-          </div>
-          <div style={s.actions}>
-            <button style={s.btn(false)} onClick={() => startChar(currentChar)}>もう一度体験する</button>
-            <button style={s.btn(true)} onClick={() => goTo("title")}>別の人物を選ぶ</button>
-          </div>
-          <div style={{maxWidth:"680px",width:"100%",marginTop:"40px",padding:"24px 28px",borderTop:"1px solid #2a2030",textAlign:"center"}}>
-            <div style={{fontFamily:"serif",fontSize:"14px",color:"#d0c8e0",lineHeight:"2.2"}}>
-              ※人口流出9,921人という数字は、ただの統計ではありません。その一人ひとりに、去らなければならなかった『理由』と、守れなかった『日常』があります。
-            </div>
-            <div style={{fontSize:"11px",color:"#9088a0",marginTop:"10px",letterSpacing:"2px"}}>（2025年人口移動報告より出典）</div>
-          </div>
-        </div>
-      )}
+     {screen === "letter" && currentChar && (
+  <div style={s.letter}>
+    <div style={{fontSize:"12px",color:"#b0a0c0",letterSpacing:"5px",textTransform:"uppercase",marginBottom:"16px",fontWeight:"500"}}>彼女が残した、最後のメッセージ</div>
+    <div style={{fontFamily:"serif",fontSize:"18px",color:currentChar.color,letterSpacing:"4px",marginBottom:"24px",display:"flex",alignItems:"center",gap:"16px",fontWeight:"700"}}>
+      <img src={currentChar.image} alt={currentChar.name} style={{width:"60px",height:"60px",objectFit:"cover",objectPosition:"top",borderRadius:"2px"}} />
+      {currentChar.name}
     </div>
-  );
-}
+    <div className="paper-box" style={s.paper}>
+      <div style={s.paperText}>{currentChar.letter}</div>
+    </div>
+    <div style={s.disc}>
+      <div style={{fontSize:"12px",color:"#c0b0d0",letterSpacing:"4px",textTransform:"uppercase",marginBottom:"14px",fontWeight:"600"}}>グループで話し合う</div>
+      {DISCUSSION.map((q, i) => (
+        <div key={i} style={s.q}>
+          <span style={{color:"#c0b0d0",fontSize:"13px",flexShrink:0,marginTop:"2px",fontWeight:"700"}}>Q{i+1}</span>
+          <span>{q}</span>
+        </div>
+      ))}
+    </div>
+    <div style={{maxWidth:"680px",width:"100%",marginBottom:"32px",padding:"24px 28px",borderTop:"1px solid #2a2030",borderBottom:"1px solid #2a2030",textAlign:"center"}}>
+      <div style={{fontFamily:"serif",fontSize:"14px",color:"#d0c8e0",lineHeight:"2.2"}}>
+        ※人口流出9,921人という数字は、ただの統計ではありません。その一人ひとりに、去らなければならなかった『理由』と、守れなかった『日常』があります。
+      </div>
+      <div style={{fontSize:"11px",color:"#9088a0",marginTop:"10px",letterSpacing:"2px"}}>（2025年人口移動報告より出典）</div>
+    </div>
+    <div style={s.actions}>
+      <button style={s.btn(false)} onClick={() => startChar(currentChar)}>もう一度体験する</button>
+      <button style={s.btn(true)} onClick={() => goTo("title")}>別の人物を選ぶ</button>
+    </div>
+  </div>
+)}
