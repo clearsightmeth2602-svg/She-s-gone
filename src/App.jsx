@@ -160,8 +160,25 @@ export default function ShesGoneBoard() {
   const [revealed, setRevealed] = useState([]);
   const [newCard, setNewCard] = useState(null);
 
-  const startChar = (char) => { setCurrentChar(char); setRevealed([]); setNewCard(null); setScreen("game"); };
-  const revealCard = (id) => { setRevealed(prev => [...prev, id]); setNewCard(id); setTimeout(() => setNewCard(null), 2500); };
+  const goTo = (s) => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+    setScreen(s);
+  };
+
+  const startChar = (char) => {
+    setCurrentChar(char);
+    setRevealed([]);
+    setNewCard(null);
+    window.scrollTo({ top: 0, behavior: "instant" });
+    setScreen("game");
+  };
+
+  const revealCard = (id) => {
+    setRevealed(prev => [...prev, id]);
+    setNewCard(id);
+    setTimeout(() => setNewCard(null), 2500);
+  };
+
   const canReveal = (i) => {
     if (!currentChar) return false;
     if (revealed.includes(currentChar.evidence[i].id)) return false;
@@ -170,45 +187,50 @@ export default function ShesGoneBoard() {
   };
 
   const s = {
-    wrap: { minHeight: "100vh", background: "#0d0d12", fontFamily: "'DM Mono', monospace", color: "#e8e0d0" },
+    wrap: { minHeight: "100vh", background: "#0d0d12", fontFamily: "'DM Mono', monospace", color: "#f0ecf8" },
     title: { minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "40px 24px", textAlign: "center" },
-    titleMain: { fontFamily: "serif", fontSize: "clamp(32px,6vw,48px)", letterSpacing: "8px", marginBottom: "8px" },
-    titleEn: { fontSize: "15px", color: "#9a8aaa", letterSpacing: "8px", marginBottom: "32px" },
-    titleSub: { fontFamily: "serif", fontSize: "15px", color: "#a090b0", lineHeight: "2.2", marginBottom: "40px", maxWidth: "640px" },
+    titleMain: { fontFamily: "serif", fontSize: "clamp(32px,6vw,48px)", letterSpacing: "8px", marginBottom: "8px", fontWeight: "700", color: "#ffffff" },
+    titleEn: { fontSize: "15px", color: "#b0a0c0", letterSpacing: "8px", marginBottom: "32px", fontWeight: "500" },
+    titleSub: { fontFamily: "serif", fontSize: "15px", color: "#c8bcd8", lineHeight: "2.2", marginBottom: "40px", maxWidth: "640px" },
     grid: { display: "grid", gridTemplateColumns: "repeat(2,1fr)", gap: "14px", maxWidth: "800px", width: "100%", marginBottom: "24px" },
     card: (c) => ({ background: "#110e18", border: `1px solid #3a2a4a`, borderTop: `2px solid ${c}`, padding: "20px 18px", cursor: "pointer", textAlign: "left" }),
-    game: { minHeight: "100vh", padding: "28px 40px", maxWidth: "1300px", margin: "0 auto", boxSizing: "border-box" },
     header: { display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "24px", paddingBottom: "18px", borderBottom: "1px solid #2a2030", gap: "16px", flexWrap: "wrap" },
-    back: { background: "transparent", border: "1px solid #4a3a5a", color: "#9a8aaa", fontFamily: "inherit", fontSize: "13px", letterSpacing: "2px", padding: "6px 12px", cursor: "pointer" },
-    layout: { display: "grid", gridTemplateColumns: "1fr minmax(200px, 280px)", gap: "20px" },
-    evCard: (revealed, unlockable) => ({ border: `1px solid ${revealed ? "#3a2a4a" : unlockable ? "#4a3a5a" : "#2a2030"}`, opacity: revealed || unlockable ? 1 : 0.45, background: revealed ? "#0e0b15" : "transparent", marginBottom: "10px", overflow: "hidden" }),
+    back: { background: "transparent", border: "1px solid #5a4a6a", color: "#d0c0e0", fontFamily: "inherit", fontSize: "13px", letterSpacing: "2px", padding: "8px 14px", cursor: "pointer", fontWeight: "500" },
+    evCard: (rev, unlockable) => ({ border: `1px solid ${rev ? "#3a2a4a" : unlockable ? "#4a3a5a" : "#2a2030"}`, opacity: rev || unlockable ? 1 : 0.45, background: rev ? "#0e0b15" : "transparent", marginBottom: "10px", overflow: "hidden" }),
     evInner: { padding: "16px 18px" },
     evLocked: { padding: "14px 18px", display: "flex", justifyContent: "space-between", alignItems: "center" },
-    unlockBtn: { background: "#1a1425", border: "1px solid #6a5a7a", color: "#b09ac0", fontFamily: "inherit", fontSize: "12px", letterSpacing: "2px", padding: "6px 14px", cursor: "pointer" },
+    unlockBtn: { background: "#1a1425", border: "1px solid #6a5a7a", color: "#e0d0f0", fontFamily: "inherit", fontSize: "13px", letterSpacing: "2px", padding: "8px 16px", cursor: "pointer", fontWeight: "600" },
     panel: { display: "flex", flexDirection: "column", gap: "12px" },
-    panelCard: { background: "#0e0b15", border: "1px solid #2a2030", padding: "18px" },
-    label: { fontSize: "11px", color: "#8a7a9a", letterSpacing: "3px", textTransform: "uppercase", marginBottom: "10px" },
+    label: { fontSize: "12px", color: "#c0b0d0", letterSpacing: "3px", textTransform: "uppercase", marginBottom: "10px", fontWeight: "600" },
     letter: { minHeight: "100vh", padding: "48px 20px", display: "flex", flexDirection: "column", alignItems: "center" },
     paper: { maxWidth: "680px", width: "100%", background: "#faf6f0", padding: "44px 48px", marginBottom: "40px" },
-    paperText: { fontFamily: "serif", fontSize: "15px", color: "#2a2020", lineHeight: "2.4", whiteSpace: "pre-line" },
+    paperText: { fontFamily: "serif", fontSize: "15px", color: "#1a1010", lineHeight: "2.4", whiteSpace: "pre-line", fontWeight: "500" },
     disc: { maxWidth: "680px", width: "100%", marginBottom: "40px" },
-    q: { background: "#110e18", border: "1px solid #3a2a4a", padding: "14px 18px", fontFamily: "serif", fontSize: "14px", color: "#a090b0", lineHeight: "1.8", display: "flex", gap: "10px", marginBottom: "8px" },
+    q: { background: "#110e18", border: "1px solid #3a2a4a", padding: "14px 18px", fontFamily: "serif", fontSize: "14px", color: "#e0d8f0", lineHeight: "1.8", display: "flex", gap: "10px", marginBottom: "8px" },
     actions: { display: "flex", gap: "10px", maxWidth: "680px", width: "100%" },
-    btn: (primary) => ({ flex: 1, padding: "11px", fontFamily: "inherit", fontSize: "14px", letterSpacing: "2px", cursor: "pointer", textTransform: "uppercase", border: "1px solid", borderColor: primary ? "#6a5a7a" : "#3a2a4a", background: primary ? "#1a1425" : "transparent", color: primary ? "#c8b8d8" : "#9a8aaa" }),
+    btn: (primary) => ({ flex: 1, padding: "12px", fontFamily: "inherit", fontSize: "13px", letterSpacing: "2px", cursor: "pointer", textTransform: "uppercase", border: "1px solid", borderColor: primary ? "#7a6a8a" : "#4a3a5a", background: primary ? "#1a1425" : "transparent", color: primary ? "#e8d8f8" : "#c8b8d8", fontWeight: "500" }),
   };
 
   return (
     <div style={s.wrap}>
-      <link href="https://fonts.googleapis.com/css2?family=DM+Mono&display=swap" rel="stylesheet" />
+      <style>{`
+        @media (max-width: 768px) {
+          .game-wrap { padding: 16px 12px !important; }
+          .game-layout { grid-template-columns: 1fr !important; }
+          .panel-top { order: -1; }
+          .paper-box { padding: 28px 20px !important; }
+        }
+      `}</style>
+      <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
       {screen === "title" && (
         <div style={s.title}>
-          <div style={{ fontSize: "12px", letterSpacing: "3px", color: "#9a8aaa", marginBottom: "32px" }}>© Prime Design Factory</div>
+          <div style={{ fontSize: "12px", letterSpacing: "3px", color: "#b0a0c0", marginBottom: "32px", fontWeight: "500" }}>© Prime Design Factory</div>
           <div style={s.titleMain}>彼女は、いない。</div>
           <div style={s.titleEn}>SHE'S GONE</div>
           <div style={s.titleSub}>
-            ある日、前触れもなく<em style={{color:"#c8b8d8",fontStyle:"normal"}}>彼女たちは姿を消した</em>。<br />
-            残されていたのは、それぞれの<em style={{color:"#c8b8d8",fontStyle:"normal"}}>小さなメモ</em>だった。<br /><br />
+            ある日、前触れもなく<em style={{color:"#ffffff",fontStyle:"normal",fontWeight:"700"}}>彼女たちは姿を消した</em>。<br />
+            残されていたのは、それぞれの<em style={{color:"#ffffff",fontStyle:"normal",fontWeight:"700"}}>小さなメモ</em>だった。<br /><br />
             グループで証拠を集め、推理し、話し合う。<br />
             なぜ彼女たちは、この街を去ったのか。
           </div>
@@ -216,46 +238,46 @@ export default function ShesGoneBoard() {
             {CHARACTERS.map(c => (
               <div key={c.id} style={s.card(c.color)} onClick={() => startChar(c)}>
                 <img src={c.image} alt={c.name} style={{width:"100%",height:"120px",objectFit:"cover",objectPosition:"top",marginBottom:"10px"}} />
-                <div style={{fontSize:"11px",letterSpacing:"3px",textTransform:"uppercase",color:c.color,marginBottom:"6px"}}>{c.role}</div>
-                <div style={{fontFamily:"serif",fontSize:"16px",marginBottom:"4px"}}>{c.name}</div>
-                <div style={{fontSize:"12px",color:"#9a8aaa",marginBottom:"8px"}}>{c.age}</div>
-                <div style={{fontFamily:"serif",fontSize:"13px",color:"#b0a0c0",lineHeight:"1.8"}}>{c.tagline}</div>
+                <div style={{fontSize:"11px",letterSpacing:"3px",textTransform:"uppercase",color:c.color,marginBottom:"6px",fontWeight:"600"}}>{c.role}</div>
+                <div style={{fontFamily:"serif",fontSize:"16px",marginBottom:"4px",color:"#ffffff",fontWeight:"700"}}>{c.name}</div>
+                <div style={{fontSize:"12px",color:"#b0a0c0",marginBottom:"8px"}}>{c.age}</div>
+                <div style={{fontFamily:"serif",fontSize:"13px",color:"#d0c4e0",lineHeight:"1.8"}}>{c.tagline}</div>
               </div>
             ))}
           </div>
-          <div style={{fontSize:"12px",color:"#7a6a8a",letterSpacing:"2px"}}>※ 1ケース約30分。グループで話し合いながら進めてください。</div>
+          <div style={{fontSize:"12px",color:"#9088a0",letterSpacing:"2px"}}>※ 1ケース約30分。グループで話し合いながら進めてください。</div>
         </div>
       )}
 
       {screen === "game" && currentChar && (
-        <div style={s.game}>
+        <div className="game-wrap" style={{minHeight:"100vh",padding:"28px 40px",maxWidth:"1300px",margin:"0 auto",boxSizing:"border-box"}}>
           <div style={s.header}>
             <div style={{display:"flex",flexDirection:"column",gap:"10px"}}>
-              <button style={s.back} onClick={() => setScreen("title")}>← キャラクター選択に戻る</button>
+              <button style={s.back} onClick={() => goTo("title")}>← キャラクター選択に戻る</button>
               <div style={{display:"flex",alignItems:"center",gap:"12px"}}>
                 <img src={currentChar.image} alt={currentChar.name} style={{width:"60px",height:"60px",objectFit:"cover",objectPosition:"top",borderRadius:"2px"}} />
                 <div>
-                  <div style={{fontSize:"11px",letterSpacing:"3px",textTransform:"uppercase",color:currentChar.color,marginBottom:"4px"}}>{currentChar.role}</div>
-                  <div style={{fontFamily:"serif",fontSize:"20px",marginBottom:"4px"}}>{currentChar.name}</div>
-                  <div style={{fontFamily:"serif",fontSize:"13px",color:"#b0a0c0"}}>{currentChar.tagline}</div>
+                  <div style={{fontSize:"11px",letterSpacing:"3px",textTransform:"uppercase",color:currentChar.color,marginBottom:"4px",fontWeight:"600"}}>{currentChar.role}</div>
+                  <div style={{fontFamily:"serif",fontSize:"20px",marginBottom:"4px",color:"#ffffff",fontWeight:"700"}}>{currentChar.name}</div>
+                  <div style={{fontFamily:"serif",fontSize:"13px",color:"#c8bcd8"}}>{currentChar.tagline}</div>
                 </div>
               </div>
             </div>
             <div style={{textAlign:"right",flexShrink:0}}>
-              <div style={{fontSize:"11px",color:"#8a7a9a",letterSpacing:"2px",marginBottom:"6px"}}>証拠開示</div>
-              <div style={{width:"100px",height:"1px",background:"#2a2030",marginLeft:"auto"}}>
+              <div style={{fontSize:"12px",color:"#c0b0d0",letterSpacing:"2px",marginBottom:"6px",fontWeight:"500"}}>証拠開示</div>
+              <div style={{width:"100px",height:"2px",background:"#2a2030",marginLeft:"auto"}}>
                 <div style={{height:"100%",width:`${(revealed.length/currentChar.evidence.length)*100}%`,background:currentChar.color,transition:"width 0.4s"}} />
               </div>
-              <div style={{fontFamily:"serif",fontSize:"16px",textAlign:"right",marginTop:"6px",color:currentChar.color}}>{revealed.length}/{currentChar.evidence.length}</div>
+              <div style={{fontFamily:"serif",fontSize:"18px",textAlign:"right",marginTop:"6px",color:currentChar.color,fontWeight:"700"}}>{revealed.length}/{currentChar.evidence.length}</div>
             </div>
           </div>
 
           <div style={{background:"#0e0b15",border:"1px solid #2a2030",padding:"16px 18px",marginBottom:"20px"}}>
             <div style={s.label}>この人物について</div>
-            <div style={{fontFamily:"serif",fontSize:"14px",color:"#a090b0",lineHeight:"2"}}>{currentChar.situation}</div>
+            <div style={{fontFamily:"serif",fontSize:"14px",color:"#d0c8e0",lineHeight:"2"}}>{currentChar.situation}</div>
           </div>
 
-          <div style={s.layout}>
+          <div className="game-layout" style={{display:"grid",gridTemplateColumns:"1fr minmax(200px,280px)",gap:"20px"}}>
             <div>
               {currentChar.evidence.map((ev, i) => {
                 const isRevealed = revealed.includes(ev.id);
@@ -265,21 +287,21 @@ export default function ShesGoneBoard() {
                   <div key={ev.id} style={s.evCard(isRevealed, unlockable)}>
                     {isRevealed ? (
                       <div style={s.evInner}>
-                        {isNew && <div style={{display:"inline-block",fontSize:"11px",letterSpacing:"2px",padding:"2px 8px",marginBottom:"10px",background:currentChar.color,color:currentChar.colorLight}}>NEW</div>}
+                        {isNew && <div style={{display:"inline-block",fontSize:"11px",letterSpacing:"2px",padding:"2px 8px",marginBottom:"10px",background:currentChar.color,color:currentChar.colorLight,fontWeight:"700"}}>NEW</div>}
                         <div style={{display:"flex",gap:"10px",alignItems:"flex-start",marginBottom:"8px"}}>
                           <span style={{fontSize:"16px",flexShrink:0}}>{ev.icon}</span>
                           <div>
-                            <div style={{fontSize:"11px",color:"#8a7a9a",letterSpacing:"3px",textTransform:"uppercase",marginBottom:"4px"}}>証拠 {String(ev.id).padStart(2,"0")}</div>
-                            <div style={{fontFamily:"serif",fontSize:"14px",color:"#c8b8d8"}}>{ev.title}</div>
+                            <div style={{fontSize:"11px",color:"#b0a0c0",letterSpacing:"3px",textTransform:"uppercase",marginBottom:"4px",fontWeight:"500"}}>証拠 {String(ev.id).padStart(2,"0")}</div>
+                            <div style={{fontFamily:"serif",fontSize:"15px",color:"#ffffff",fontWeight:"700"}}>{ev.title}</div>
                           </div>
                         </div>
-                        <div style={{fontFamily:"serif",fontSize:"13px",color:"#a090b0",lineHeight:"1.9",whiteSpace:"pre-line"}}>{ev.text}</div>
+                        <div style={{fontFamily:"serif",fontSize:"14px",color:"#d8d0e8",lineHeight:"1.9",whiteSpace:"pre-line"}}>{ev.text}</div>
                       </div>
                     ) : (
                       <div style={s.evLocked}>
                         <div>
-                          <div style={{fontSize:"12px",color:"#7a6a8a",letterSpacing:"3px"}}>証拠 {String(ev.id).padStart(2,"0")}</div>
-                          <div style={{fontSize:"12px",color:"#6a5a7a"}}>{unlockable ? "── 開示可能" : "── 鍵がかかっている"}</div>
+                          <div style={{fontSize:"12px",color:"#b0a0c0",letterSpacing:"3px",fontWeight:"500"}}>証拠 {String(ev.id).padStart(2,"0")}</div>
+                          <div style={{fontSize:"12px",color:unlockable?"#d0c0e0":"#8a7a9a"}}>{unlockable ? "── 開示可能" : "── 鍵がかかっている"}</div>
                         </div>
                         {unlockable && <button style={s.unlockBtn} onClick={() => revealCard(ev.id)}>開封する</button>}
                       </div>
@@ -288,17 +310,17 @@ export default function ShesGoneBoard() {
                 );
               })}
             </div>
-            <div style={s.panel}>
+            <div className="panel-top" style={s.panel}>
               <button
-                style={{width:"100%",border:"1px solid",fontFamily:"inherit",fontSize:"13px",letterSpacing:"3px",padding:"12px",cursor:revealed.length<3?"not-allowed":"pointer",textTransform:"uppercase",background:revealed.length>=3?currentChar.color+"22":"transparent",borderColor:revealed.length>=3?currentChar.color:"#3a2a4a",color:revealed.length>=3?currentChar.colorLight:"#6a5a7a",opacity:revealed.length<3?0.4:1}}
+                style={{width:"100%",border:"1px solid",fontFamily:"inherit",fontSize:"13px",letterSpacing:"3px",padding:"14px",cursor:revealed.length<3?"not-allowed":"pointer",textTransform:"uppercase",background:revealed.length>=3?currentChar.color+"33":"transparent",borderColor:revealed.length>=3?currentChar.color:"#3a2a4a",color:revealed.length>=3?"#ffffff":"#8a7a9a",opacity:revealed.length<3?0.4:1,fontWeight:"600"}}
                 disabled={revealed.length < 3}
-                onClick={() => setScreen("letter")}
+                onClick={() => goTo("letter")}
               >
                 {revealed.length < 3 ? "証拠をもっと集めろ" : "手紙を開封する"}
               </button>
               <div>
                 <div style={s.label}>グループ議論メモ</div>
-                <textarea placeholder="気づいたこと、チームの意見を書き留める..." style={{width:"100%",background:"#0e0b15",border:"1px solid #2a2030",padding:"10px",fontFamily:"serif",fontSize:"13px",color:"#a090b0",minHeight:"80px",resize:"vertical",outline:"none",lineHeight:"1.8",boxSizing:"border-box"}} />
+                <textarea placeholder="気づいたこと、チームの意見を書き留める..." style={{width:"100%",background:"#0e0b15",border:"1px solid #2a2030",padding:"10px",fontFamily:"serif",fontSize:"13px",color:"#d0c8e0",minHeight:"80px",resize:"vertical",outline:"none",lineHeight:"1.8",boxSizing:"border-box"}} />
               </div>
             </div>
           </div>
@@ -307,32 +329,32 @@ export default function ShesGoneBoard() {
 
       {screen === "letter" && currentChar && (
         <div style={s.letter}>
-          <div style={{fontSize:"12px",color:"#9a8aaa",letterSpacing:"5px",textTransform:"uppercase",marginBottom:"16px"}}>彼女が残した、最後のメッセージ</div>
-          <div style={{fontFamily:"serif",fontSize:"18px",color:currentChar.color,letterSpacing:"4px",marginBottom:"24px",display:"flex",alignItems:"center",gap:"16px"}}>
+          <div style={{fontSize:"12px",color:"#b0a0c0",letterSpacing:"5px",textTransform:"uppercase",marginBottom:"16px",fontWeight:"500"}}>彼女が残した、最後のメッセージ</div>
+          <div style={{fontFamily:"serif",fontSize:"18px",color:currentChar.color,letterSpacing:"4px",marginBottom:"24px",display:"flex",alignItems:"center",gap:"16px",fontWeight:"700"}}>
             <img src={currentChar.image} alt={currentChar.name} style={{width:"60px",height:"60px",objectFit:"cover",objectPosition:"top",borderRadius:"2px"}} />
             {currentChar.name}
           </div>
-          <div style={s.paper}>
+          <div className="paper-box" style={s.paper}>
             <div style={s.paperText}>{currentChar.letter}</div>
           </div>
           <div style={s.disc}>
-            <div style={{fontSize:"12px",color:"#9a8aaa",letterSpacing:"4px",textTransform:"uppercase",marginBottom:"14px"}}>グループで話し合う</div>
+            <div style={{fontSize:"12px",color:"#c0b0d0",letterSpacing:"4px",textTransform:"uppercase",marginBottom:"14px",fontWeight:"600"}}>グループで話し合う</div>
             {DISCUSSION.map((q, i) => (
               <div key={i} style={s.q}>
-                <span style={{color:"#8a7a9a",fontSize:"12px",flexShrink:0,marginTop:"2px"}}>Q{i+1}</span>
+                <span style={{color:"#c0b0d0",fontSize:"13px",flexShrink:0,marginTop:"2px",fontWeight:"700"}}>Q{i+1}</span>
                 <span>{q}</span>
               </div>
             ))}
           </div>
           <div style={s.actions}>
             <button style={s.btn(false)} onClick={() => startChar(currentChar)}>もう一度体験する</button>
-            <button style={s.btn(true)} onClick={() => setScreen("title")}>別の人物を選ぶ</button>
+            <button style={s.btn(true)} onClick={() => goTo("title")}>別の人物を選ぶ</button>
           </div>
           <div style={{maxWidth:"680px",width:"100%",marginTop:"40px",padding:"24px 28px",borderTop:"1px solid #2a2030",textAlign:"center"}}>
-            <div style={{fontFamily:"serif",fontSize:"14px",color:"#a090b0",lineHeight:"2.2"}}>
+            <div style={{fontFamily:"serif",fontSize:"14px",color:"#d0c8e0",lineHeight:"2.2"}}>
               ※人口流出9,921人という数字は、ただの統計ではありません。その一人ひとりに、去らなければならなかった『理由』と、守れなかった『日常』があります。
             </div>
-            <div style={{fontSize:"11px",color:"#7a6a8a",marginTop:"10px",letterSpacing:"2px"}}>（2025年人口移動報告より出典）</div>
+            <div style={{fontSize:"11px",color:"#9088a0",marginTop:"10px",letterSpacing:"2px"}}>（2025年人口移動報告より出典）</div>
           </div>
         </div>
       )}
