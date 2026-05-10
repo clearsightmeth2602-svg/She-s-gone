@@ -3,6 +3,7 @@ import { useState } from "react";
 const CHARACTERS = [
   {
     id: "mika", name: "佐藤 美香", age: "34歳", role: "シングルマザー", icon: "👩", image: "https://i.imgur.com/K1A2zMY.png",
+    illustration: "https://i.imgur.com/zt7pgPS.jpeg",
     color: "#8a4a6a", colorLight: "#f5e8f0",
     tagline: "子どもと二人で、精一杯生きていた。",
     situation: "離婚後、3歳の息子と二人暮らし。パートと育児を掛け持ちしながら、この街で生き直そうとしていた。",
@@ -47,6 +48,7 @@ const CHARACTERS = [
   },
   {
     id: "kenji", name: "田中 健二・澄子", age: "73歳・71歳", role: "高齢の夫婦", icon: "👴", image: "https://i.imgur.com/xph8VAg.jpeg",
+    illustration: "https://i.imgur.com/KkP7a42.jpeg",
     color: "#4a6a4a", colorLight: "#e8f0e8",
     tagline: "50年住んだ街を、二人で去った。",
     situation: "この街で出会い、子どもを育て、50年を過ごした夫婦。夫が足を悪くしてから、街が少しずつ遠くなっていった。",
@@ -82,6 +84,7 @@ const CHARACTERS = [
   },
   {
     id: "family", name: "木村 一家", age: "夫38歳・妻35歳・子6歳・3歳", role: "子育て世代の家族", icon: "👨‍👩‍👧‍👦", image: "https://i.imgur.com/UDQVAKI.png",
+    illustration: "https://i.imgur.com/E12aZlX.jpeg",
     color: "#4a5a8a", colorLight: "#e8ecf5",
     tagline: "この街で子どもを育てようとしていた。",
     situation: "転勤を機にこの街に移住。子どもたちの笑顔のために、ここで根を張るつもりだった。",
@@ -113,6 +116,7 @@ const CHARACTERS = [
   },
   {
     id: "yuki", name: "中村 雪", age: "28歳", role: "Uターンで戻った若者", icon: "🧑", image: "https://i.imgur.com/lDheERI.png",
+    illustration: "https://i.imgur.com/zzf6rZS.jpeg",
     color: "#7a5a2a", colorLight: "#f5f0e0",
     tagline: "故郷に戻ってきた。でも、居場所がなかった。",
     situation: "都会で5年働いた後、故郷に戻ってきた。地元に貢献したかった。でも街は、彼女が帰ってくることを想定していなかった。",
@@ -203,7 +207,7 @@ export default function ShesGoneBoard() {
     panel: { display: "flex", flexDirection: "column", gap: "12px" },
     label: { fontSize: "12px", color: "#c0b0d0", letterSpacing: "3px", textTransform: "uppercase", marginBottom: "10px", fontWeight: "600" },
     letter: { minHeight: "100vh", padding: "48px 20px", display: "flex", flexDirection: "column", alignItems: "center" },
-    paper: { maxWidth: "680px", width: "100%", background: "#faf6f0", padding: "44px 48px", marginBottom: "40px" },
+    paper: { maxWidth: "680px", width: "100%", background: "#faf6f0", padding: "44px 48px", marginBottom: "0" },
     paperText: { fontFamily: "serif", fontSize: "15px", color: "#1a1010", lineHeight: "2.4", whiteSpace: "pre-line", fontWeight: "500" },
     disc: { maxWidth: "680px", width: "100%", marginBottom: "40px" },
     q: { background: "#110e18", border: "1px solid #3a2a4a", padding: "14px 18px", fontFamily: "serif", fontSize: "14px", color: "#e0d8f0", lineHeight: "1.8", display: "flex", gap: "10px", marginBottom: "8px" },
@@ -327,34 +331,63 @@ export default function ShesGoneBoard() {
         </div>
       )}
 
-     {screen === "letter" && currentChar && (
-  <div style={s.letter}>
-    <div style={{fontSize:"12px",color:"#b0a0c0",letterSpacing:"5px",textTransform:"uppercase",marginBottom:"16px",fontWeight:"500"}}>彼女が残した、最後のメッセージ</div>
-    <div style={{fontFamily:"serif",fontSize:"18px",color:currentChar.color,letterSpacing:"4px",marginBottom:"24px",display:"flex",alignItems:"center",gap:"16px",fontWeight:"700"}}>
-      <img src={currentChar.image} alt={currentChar.name} style={{width:"60px",height:"60px",objectFit:"cover",objectPosition:"top",borderRadius:"2px"}} />
-      {currentChar.name}
-    </div>
-    <div className="paper-box" style={s.paper}>
-      <div style={s.paperText}>{currentChar.letter}</div>
-    </div>
-    <div style={s.disc}>
-      <div style={{fontSize:"12px",color:"#c0b0d0",letterSpacing:"4px",textTransform:"uppercase",marginBottom:"14px",fontWeight:"600"}}>グループで話し合う</div>
-      {DISCUSSION.map((q, i) => (
-        <div key={i} style={s.q}>
-          <span style={{color:"#c0b0d0",fontSize:"13px",flexShrink:0,marginTop:"2px",fontWeight:"700"}}>Q{i+1}</span>
-          <span>{q}</span>
+      {screen === "letter" && currentChar && (
+        <div style={s.letter}>
+          <div style={{fontSize:"12px",color:"#b0a0c0",letterSpacing:"5px",textTransform:"uppercase",marginBottom:"16px",fontWeight:"500"}}>彼女が残した、最後のメッセージ</div>
+          <div style={{fontFamily:"serif",fontSize:"18px",color:currentChar.color,letterSpacing:"4px",marginBottom:"24px",display:"flex",alignItems:"center",gap:"16px",fontWeight:"700"}}>
+            <img src={currentChar.image} alt={currentChar.name} style={{width:"60px",height:"60px",objectFit:"cover",objectPosition:"top",borderRadius:"2px"}} />
+            {currentChar.name}
+          </div>
+
+          {/* 手紙 */}
+          <div className="paper-box" style={s.paper}>
+            <div style={s.paperText}>{currentChar.letter}</div>
+          </div>
+
+          {/* 挿絵 + 統計文 */}
+          <div style={{maxWidth:"680px",width:"100%",marginBottom:"40px"}}>
+            <img
+              src={currentChar.illustration}
+              alt={`${currentChar.name}の記憶`}
+              style={{
+                width:"100%",
+                display:"block",
+                objectFit:"cover",
+                maxHeight:"420px",
+                filter:"grayscale(20%) brightness(0.92)",
+              }}
+            />
+            <div style={{
+              background:"#0e0b15",
+              borderLeft:`3px solid ${currentChar.color}`,
+              borderRight:"1px solid #2a2030",
+              borderBottom:"1px solid #2a2030",
+              padding:"20px 24px",
+            }}>
+              <div style={{fontFamily:"serif",fontSize:"13px",color:"#d0c8e0",lineHeight:"2.2"}}>
+                ※人口流出9,921人という数字は、ただの統計ではありません。その一人ひとりに、去らなければならなかった『理由』と、守れなかった『日常』があります。
+              </div>
+              <div style={{fontSize:"11px",color:"#9088a0",marginTop:"8px",letterSpacing:"2px"}}>（2025年人口移動報告より出典）</div>
+            </div>
+          </div>
+
+          {/* 議論設問 */}
+          <div style={s.disc}>
+            <div style={{fontSize:"12px",color:"#c0b0d0",letterSpacing:"4px",textTransform:"uppercase",marginBottom:"14px",fontWeight:"600"}}>グループで話し合う</div>
+            {DISCUSSION.map((q, i) => (
+              <div key={i} style={s.q}>
+                <span style={{color:"#c0b0d0",fontSize:"13px",flexShrink:0,marginTop:"2px",fontWeight:"700"}}>Q{i+1}</span>
+                <span>{q}</span>
+              </div>
+            ))}
+          </div>
+
+          <div style={s.actions}>
+            <button style={s.btn(false)} onClick={() => startChar(currentChar)}>もう一度体験する</button>
+            <button style={s.btn(true)} onClick={() => goTo("title")}>別の人物を選ぶ</button>
+          </div>
         </div>
-      ))}
+      )}
     </div>
-    <div style={{maxWidth:"680px",width:"100%",marginBottom:"32px",padding:"24px 28px",borderTop:"1px solid #2a2030",borderBottom:"1px solid #2a2030",textAlign:"center"}}>
-      <div style={{fontFamily:"serif",fontSize:"14px",color:"#d0c8e0",lineHeight:"2.2"}}>
-        ※人口流出9,921人という数字は、ただの統計ではありません。その一人ひとりに、去らなければならなかった『理由』と、守れなかった『日常』があります。
-      </div>
-      <div style={{fontSize:"11px",color:"#9088a0",marginTop:"10px",letterSpacing:"2px"}}>（2025年人口移動報告より出典）</div>
-    </div>
-    <div style={s.actions}>
-      <button style={s.btn(false)} onClick={() => startChar(currentChar)}>もう一度体験する</button>
-      <button style={s.btn(true)} onClick={() => goTo("title")}>別の人物を選ぶ</button>
-    </div>
-  </div>
-)}
+  );
+}
